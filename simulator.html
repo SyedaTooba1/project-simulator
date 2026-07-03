@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queuing Simulation & Model </title>
+    <link rel="stylesheet" href="./styles.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+   
+
+</head>
+
+<body>
+
+    <div class="container-1">
+
+        <div class="div-heading">
+            <h1 class="heading">Queueing Simulation</h1>
+        </div>
+    </div>
+
+    <div class="container-1">
+
+        <div>
+
+            <label>Type of Queuing Model</label><br />
+            <select id="queuing-model" onchange="updateQueuingInputs()">
+                <option value="">--Select any Model--</option>
+                <option value="M/M/1">M/M/1</option>
+                <option value="M/M/2">M/M/C</option>
+                <option value="M/G/1">M/G/1</option>
+                <option value="M/G/2">M/G/C</option>
+                <option value="G/G/1">G/G/1</option>
+                <option value="G/G/2">G/G/C</option>
+            </select>
+        
+            <br /><br />
+            <input type="text" placeholder="Number of Servers" id="numServers" class="common-input3 hidden"><br /><br />
+            <input type="text" placeholder="Number of Customers" id="numCustomers" class="common-input hidden"><br /><br />
+            <input type="text" placeholder="Mean of Arrival Distribution" id="mean-arrival" class="common-input1 hidden"><br /><br />
+            <input type="number" placeholder="Mean of Service Time" id="service-mean" class="common-input2 hidden"><br /><br />
+        
+            <div id="distribution-select" class="hidden">
+                <label for="distributionType">Select Arrival Distribution:</label>
+                <select id="distributionType" onchange="updateDistributionInputs()">
+                    <option value="">--Select--</option>
+                    <option value="uniform">Uniform Distribution</option>
+                    <option value="gamma">Gamma Distribution</option>
+                    <option value="normal">Normal Distribution</option>
+                </select>
+            </div>
+        
+            <!-- Uniform Inputs -->
+            <div id="uniformInputs" class="hidden">
+                <input type="text" id="uniformMin" placeholder="Enter Min Value"><br />
+                <input type="text" id="uniformMax" placeholder="Enter Max Value"><br />
+            </div>
+        
+            <!-- Gamma Inputs -->
+            <div id="gammaInputs" class="hidden">
+                <input type="text" id="gammaAlpha" placeholder="Enter Alpha"><br />
+                <input type="text" id="gammaBeta" placeholder="Enter Beta"><br />
+            </div>
+        
+            <!-- Normal Inputs -->
+            <div id="normalInputs" class="hidden">
+                <input type="text" id="normalMean" placeholder="Enter Mean"><br />
+                <input type="text" id="normalSD" placeholder="Enter Standard Deviation"><br />
+            </div>
+        
+            <div id="service-distribution-select" class="hidden">
+                <label for="serviceDistributionType">Select Service Distribution:</label>
+                <select id="serviceDistributionType" onchange="updateServiceDistributionInputs()">
+                    <option value="">--Select--</option>
+                    <option value="uniform">Uniform Distribution</option>
+                    <option value="gamma">Gamma Distribution</option>
+                    <option value="normal">Normal Distribution</option>
+                </select>
+            </div>
+        
+            <!-- Service Distribution Inputs -->
+            <div id="serviceUniformInputs" class="hidden">
+                <input type="text" id="serviceUniformMin" placeholder="Enter Min Value"><br />
+                <input type="text" id="serviceUniformMax" placeholder="Enter Max Value"><br />
+            </div>
+        
+            <div id="serviceGammaInputs" class="hidden">
+                <input type="text" id="serviceGammaAlpha" placeholder="Enter Alpha"><br />
+                <input type="text" id="serviceGammaAlpha" placeholder="Enter Beta"><br />
+            </div>
+        
+            <div id="serviceNormalInputs" class="hidden">
+                <input type="text" id="serviceNormalMean" placeholder="Enter Mean"><br />
+                <input type="text" id="serviceNormalSD" placeholder="Enter Standard Deviation"><br />
+            </div>
+            <div class="container-1">
+                <button id="calculate-btn" class="btn btn-lg" onclick="Calculate();">Calculate</button>
+
+            </div>  
+        </div>
+
+    </div>
+
+    <br /> <br />
+
+    <div class="container-table">
+        <table id="simulation_table" class="sim-table">
+            <!-- The table headers -->
+            <tr>
+                <th>Serial Number</th>
+                <th>Cp Lookup</th>
+                <th>Cp       </th>
+                <th>Avg Time Between Arrival</th>
+                <th>Inter Arrival</th>
+                <th>Arrival Time</th>
+                <th>Service Time</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Turnaround Time</th>
+                <th>Wait Time</th>
+                <th>Response Time</th>
+                <th>Server</th>
+
+            </tr>
+        </table>
+
+    </div>
+
+    <br /> <br />
+    <div id="ganttChartContainer">
+        <!-- MM1 Gantt Chart -->
+        <div id="mm1GanttChart" class="hidden">
+            <h2>Gantt Chart</h2>
+            <div id="ganttChart"></div>
+            <div id="timeLabels"></div>
+        </div>
+    
+        <!-- MM2 Gantt Chart -->
+        <div id="mm2GanttChart" class="hidden">
+            <h2 id="server1Title" class="hidden">Gantt Chart (Server 1)</h2>
+            <div id="ganttChartServer1" class="hidden"></div>
+        
+            <h2 id="server2Title" class="hidden">Gantt Chart (Server 2)</h2>
+            <div id="ganttChartServer2" class="hidden"></div>
+        
+            <h2 id="server3Title" class="hidden">Gantt Chart (Server 3)</h2>
+            <div id="ganttChartServer3" class="hidden"></div>
+        
+            <h2 id="server4Title" class="hidden">Gantt Chart (Server 4)</h2>
+            <div id="ganttChartServer4" class="hidden"></div>
+        
+            <h2 id="server5Title" class="hidden">Gantt Chart (Server 5)</h2>
+            <div id="ganttChartServer5" class="hidden"></div>
+        </div>
+        
+    </div>
+    
+    <div id="calculations" class="Calculate">
+        <h2>CALCULATIONS</h2>
+        <div id="mm1Utilization" class="row hidden">
+            <b>Server Utilization:</b>
+            <p id="server-utilization"></p>
+        </div>
+        <div id="mm2Utilization" class="row hidden"> 
+            <b>Server 1 Utilization:</b>
+            <p id="server1-utilization"></p>
+            <b>Server 2 Utilization:</b>
+            <p id="server2-utilization"></p>
+            <b>Server 3 Utilization:</b>
+            <p id="server3-utilization" class="hidden"></p>
+            <b>Server 4 Utilization:</b>
+            <p id="server4-utilization" class="hidden"></p>
+            <b>Server 5 Utilization:</b>
+            <p id="server5-utilization" class="hidden"></p>
+        </div>
+        
+        <div class="row">
+            <b>Average Turnaround Time:</b>
+            <p id="avg-turnaround"></p>
+        </div>
+        <div class="row">
+            <b>Average Wait Time:</b>
+            <p id="avg-wait"></p>
+        </div>
+        <div class="row">
+            <b>Average Response Time:</b>
+            <p id="avg-response"></p>
+        </div>
+    </div>
+    
+    <div  id="bargraph" class="hidden">
+        <h2>Customer Arrival Time line Graph:</h2>
+        <!-- <div id="arrivalLineGraph" style="display: none; width: 100%; height: 300px;"></div> -->
+        <div id="arrivalLineGraph">
+            <canvas id="arrivalChart"></canvas>
+        </div>
+        <h2>Customer Wait Time Bar Graph:</h2>
+        <div id="waitTimeBarGraph" style="display: flex; align-items: flex-end; height: 300px; border: 1px solid #000;"></div>
+        <h2>Customer Response Time Bar Graph:</h2>
+        <div id="responseTimeBarGraph" style="display: flex; align-items: flex-end; height: 300px; border: 1px solid #000;"></div>
+        <h2>Customer Turnaround Time Bar Graph:</h2>
+        <div id="turnaroundTimeBarGraph" style="display: flex; align-items: flex-end; height: 300px; border: 1px solid #000;"></div>
+
+
+    </div>
+    
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script> -->
+    <script src="./index.js"></script>
+
+</body>
+
+</html>
