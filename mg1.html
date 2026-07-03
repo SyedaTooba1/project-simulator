@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Queuing Models</title>    <style>
+        /* Add the following CSS styles to your stylesheet */
+
+/* Body styles */
+body {
+  font-family: Consolas, monaco, monospace;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Container styles */
+.test {
+  text-align: center;
+  margin-top: 50px;
+}
+
+
+
+/* Button styles */
+button {
+  font-family: Consolas, monaco, monospace;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: left;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Input styles */
+input[type="text"] {
+  font-family: Consolas, monaco, monospace;
+  display: block;
+  width: 23%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Label styles */
+
+
+p {
+  margin: 5px 0;
+}
+/* Style the label */
+label {
+  font-family: Consolas, monaco, monospace;
+
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Style the select dropdown */
+select {
+  width: 100%;
+  max-width: 300px; /* Adjust as needed */
+  padding: 8px 12px;
+  font-family: Consolas, monaco, monospace;
+
+  font-size: 16px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Arrow icon for the dropdown */
+select:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+/* Style for the dropdown options */
+select option {
+  font-family: Consolas, monaco, monospace;
+
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+}
+
+/* Add hover effects for options */
+select:hover {
+  border-color: #888;
+}
+.btn {
+  width: 250px;
+  padding: 15px 20px;
+  margin: 10px;
+  border: 2px solid #4c4b4b;
+  border-radius: 10px;
+  background-color: #4c4b4b;
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #333;
+  transform: scale(1.05);
+}
+
+.btn-lg {
+  font-size: 20px;
+}
+.header{
+    display: flex;
+    justify-content: center;
+}
+
+.hidden {
+  display: none; 
+}
+.test { 
+  margin-bottom: 20px;
+}
+.header { 
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+#show {
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+    </style>
+</head>
+<body>
+  <h1 class="header">M/G/1 Calculator</h1>
+
+  <div class="test">
+      <label for="distributionType">Select Distribution:</label>
+      <select id="distributionType" onchange="updateInputs()">
+          <option value="">--Select--</option>
+          <option value="uniform">Uniform Distribution</option>
+          <option value="gamma">Gamma Distribution</option>
+          <option value="normal">Normal Distribution</option>
+      </select>
+
+      <!-- Uniform Inputs -->
+      <input type="text" placeholder="Mean between interarrivals" id="Mean-arr"></button>      
+      <div id="uniformInputs" class="hidden">
+          <input type="text" id="uniformMin" placeholder="Enter Min Value">
+          <input type="text" id="uniformMax" placeholder="Enter Max Value">
+      </div>
+
+      <!-- Gamma Inputs -->
+      <div id="gammaInputs" class="hidden">
+          <input type="text" id="gammaMean" placeholder="Enter alpha">
+          <input type="text" id="gammaShape" placeholder="Enter beta">
+      </div>
+
+      <!-- Normal Inputs -->
+      <div id="normalInputs" class="hidden">
+          <input type="text" id="normalMean" placeholder="Enter Mean">
+          <input type="text" id="normalSD" placeholder="Enter Standard Deviation">
+      </div>
+
+      <button type="button" onclick="mg1();" class="btn btn-lg" id="btn">Calculate</button>
+  </div>
+
+  <div id="show">
+      <label>Interarrival: </label>
+      <p id="interarrival"></p>
+      <label>Service Time:</label>
+      <p id="service"></p>
+      <label>Utilization:</label>
+      <p id="rho"></p>
+      <label>Variance :</label>
+      <p id="VARIANCE"></p>
+      <label>Average Number of Customers in Queue (Lq):</label>
+      <p id="lq"></p>
+      <label>Average Wait Time in Queue (Wq):</label>
+      <p id="wq"></p>
+      <label>Average Wait Time in System (W):</label>
+      <p id="w"></p>
+      <label>Average Number of Customers in System (L):</label>
+      <p id="L"></p>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

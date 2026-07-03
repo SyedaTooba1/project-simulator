@@ -1,0 +1,400 @@
+body {
+    font-family: Consolas, monaco, monospace;
+    font-size: 20px;
+}
+#lineGraphContainer {
+    width: 100%;   /* Make it responsive */
+    height: 600px; /* Set a fixed height */
+}
+
+#arrivalChart {
+    width: 100%;   /* Canvas will fill the container width */
+    height: 100%;  /* Canvas will fill the container height */
+}
+
+#calculations {
+    display: none;
+}
+#simulation_table {
+    display: none;
+}
+.hidden {
+    all: unset;
+    display: none;
+}
+
+.show {
+    display: block;
+}
+#bargraph{
+    margin: 2%;
+}
+
+
+
+.row {
+    /* text-align: center; */
+    display: block;
+    align-items: center;
+    margin-bottom: 10px;
+    
+    flex-direction: row;  /* Default behavior, items in a row */
+    gap: 10px; /* Add spacing between rows */
+}
+
+.row b {
+    font-size: 25px;
+    color: #333;
+    margin-right: 10px;
+}
+
+.row p {
+    font-size: 25px;
+    color: #555;
+    margin: 0;
+}
+
+label {
+  text-align: center;
+  /* font-family: Arial, sans-serif; */
+  font-family: Consolas, monaco, monospace;
+  font-size: 25px;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Style the select dropdown */
+select {
+  width: 100%;
+  max-width: 109%; /* Adjust as needed */
+  padding: 8px 12px;
+  /* font-family: Arial, sans-serif; */
+  font-family: Consolas, monaco, monospace;
+  font-size: 16px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Arrow icon for the dropdown */
+select:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+/* Style for the dropdown options */
+select option {
+  /* font-family: Arial, sans-serif; */
+  font-family: Consolas, monaco, monospace;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+}
+
+/* Add hover effects for options */
+select:hover {
+  border-color: #888;
+}
+#ganttChartContainer {
+    position: relative;
+    width: 100%;
+    height: 68px;  /* Adjust the height of the Gantt chart */
+}
+
+#ganttChart {
+    width: 100%;
+    height: 100%;
+}
+
+.gantt-section {
+    border-radius: 6px;
+    position: absolute;
+    height: 100%;  /* Height of the Gantt bar */
+    text-align: center;
+    line-height: 30px;
+    color: white;
+    font-size: 12px;
+    border-radius: 0px;
+    cursor: pointer;  /* Add pointer cursor to indicate hover effect */
+}
+
+#timeLabels {
+    margin-top: 10px;  /* Space below the Gantt chart */
+    text-align: center;
+}
+
+#tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8); /* Slightly darker for better readability */
+    color: white;
+    padding: 8px; /* Increased padding for better aesthetics */
+    border-radius: 8px; /* More rounded corners */
+    display: none;
+    pointer-events: none;
+    z-index: 1000;
+    max-width: 300px; /* Limit tooltip width */
+    word-wrap: break-word; /* Handle long text gracefully */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for better visibility */
+    font-size: 14px; /* Adjust font size for readability */
+    white-space: pre-wrap; /* Preserve formatting for multiline text */
+}
+
+
+.time-label {
+    position: absolute;
+    bottom: 0;
+    font-size: 12px;
+    color: black;
+    margin-left: -10px;  /* To center the label */
+}
+
+
+#ganttChartServer1{
+    margin-bottom: 10%;
+}#ganttChartServer2{
+    margin-bottom: 10%;
+}#ganttChartServer3{
+    margin-bottom: 10%;
+}#ganttChartServer4{
+    margin-bottom: 10%;
+}#ganttChartServer5{
+    margin-bottom: 10%;
+}
+.container-1{
+    display: flex;
+    justify-content: center;
+}
+
+.heading{
+    text-align: center;
+}
+
+.div-heading{
+    display: flex;
+    justify-content: center;
+}
+
+.container-1 input{
+    font-family: Consolas, monaco, monospace;
+    margin-top: 10px;
+    width: 105%;
+    padding: 6px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+input{
+    width: 120%;
+    height: 25px;
+    border-radius: 5px;
+}
+.container-1 select{
+    width: 120%;
+
+
+}
+
+/* #calculate-btn{
+    width: 170px;
+    height: 30px;
+    background-color: brown;
+    border-radius: 10px;
+    color: white;
+    font-size: large;
+}
+
+#calculate-btn:hover  {
+    background-color: aqua;
+    color: black;
+} */
+
+.container-table{
+    display: flex;
+    justify-content: center;
+}
+
+.simulation_table th ,td{
+   
+    border: 1px solid black;
+    text-align: center;
+    padding: 5px;
+}
+
+#add-value{
+    width: 170px;
+    height: 30px;
+    background-color: brown;
+    border-radius: 10px;
+    color: white;
+    font-size: large;
+}
+
+#service_min{
+    display: none;
+}
+
+#service_max{
+    display: none;
+}
+
+#num_servers{
+    display: none;
+}
+
+/* .sim-table{
+    border-collapse: collapse;
+    
+}
+
+.sim-table th{
+    border: 1px solid black;
+    padding: 5px;
+} */
+.sim-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-x: auto;
+    display: block;
+}
+
+.sim-table th, .sim-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+.sim-table th {
+    background-color: #4c4b4b;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.sim-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light grey for even rows */
+}
+
+.sim-table tr:hover {
+    background-color: #f1f9ff; /* Light blue on hover */
+}
+
+.sim-table td {
+    color: #333; /* Dark text color */
+}
+
+.sim-table tr:last-child td {
+    border-bottom: 2px solid #4CAF50; /* Highlight bottom border for the last row */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .sim-table {
+        font-size: 14px;
+    }
+
+    .sim-table th, .sim-table td {
+        padding: 10px 12px;
+    }
+
+    .sim-table th {
+        font-size: 14px;
+    }
+}
+
+/* Further responsiveness for very small screens like mobile */
+@media (max-width: 480px) {
+    .sim-table th, .sim-table td {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .sim-table th {
+        font-size: 12px;
+    }
+
+    .sim-table {
+        font-size: 12px;
+        display: block;
+        overflow-x: scroll;
+        white-space: nowrap;
+    }
+}
+
+
+#avg_interarrival{
+    display: none;
+
+}
+
+#avg_service{
+    display: none;
+}
+
+#var_arrival{
+    display: none;
+}
+
+#var_service{
+    display: none;
+}
+.btn {
+    width: 250px;
+    padding:8px 20px;
+    margin: 10px;
+    border: 2px solid #4c4b4b;
+    border-radius: 10px;
+    background-color: #4c4b4b;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+  
+.btn:hover {
+    background-color: #333;
+    transform: scale(1.05);
+}
+
+  
+.btn-lg {
+    font-size: 20px;
+}
+#calculations{
+    padding: 20px;
+    /* background-color: #fff; */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    box-sizing: border-box;
+    text-align: center;
+    /* font-family: Arial, sans-serif; */
+    font-family: Consolas, monaco, monospace;
+    /* margin: 18%; */
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 37px;
+    border: 1px solid #f2f2f2;
+    /* border-radius: 8px; */
+    background-color: #f2f2f2;
+  }
+
+#calculations:hover {
+    transform: translateY(-10px); /* Subtle hover effect */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+

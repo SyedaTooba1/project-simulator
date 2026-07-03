@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Queuing Models</title>    <!-- <link rel="stylesheet" href="s1.css"> -->
+<style>
+  /* Add the following CSS styles to your s1.css stylesheet */
+
+/* Body styles */
+body {
+  font-family: Consolas, monaco, monospace;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Container styles */
+.test {
+  text-align: center;
+  margin-top: 50px;
+}
+
+#show {
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styles */
+button {
+  font-family: Consolas, monaco, monospace;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: left;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Input styles */
+input[type="text"] {
+  font-family: Consolas, monaco, monospace;
+  display: block;
+  width: 23%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Label styles */
+label {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+p {
+  
+  margin: 5px 0;
+}
+
+.btn {
+  width: 250px;
+  padding: 15px 20px;
+  margin: 10px;
+  border: 2px solid #4c4b4b;
+  border-radius: 10px;
+  background-color: #4c4b4b;
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #333;
+  transform: scale(1.05);
+
+}
+
+.btn-lg {
+  font-size: 20px;
+}
+
+</style>
+  </head>
+  <body>
+    <h1 style="display: flex; justify-content: center;">M/M/C</h1>
+    <div class="test">
+    <input type="text" placeholder="Lambda (λ)" id="Mean1"></button>
+    <input type="text" placeholder="Mu (μ)" id="Mean2"></button>
+    <input type="text" placeholder="Servers" id="Servers"></button>
+    <button type="button" onclick=mmc();  class="btn btn-lg" id="btn">Calculate</button>
+
+    </div>
+    <div id="show">
+        <label>Interarrival: </label>
+            <p id="interarrival"></p>
+        <label>Service Time:</label>
+            <p id="service"></p>
+        <label>Utilization:</label>
+            <p id="rho"></p>
+        <label>Average No of customer in the Queue  :</label>
+            <p id="lq"></p>
+        <label>Average wait time of customer in the Queue :</label>
+            <p id="wq"></p>
+      
+        
+        <label>Average wait time of customer in the System :</label>
+        <p id="w"></p>
+
+         <label>Average number of customer in the System :</label>
+        <p id="L"></p>
+
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Queuing Models</title>
+    <style>
+      /* Global Body Styles */
+      body {
+        font-family: Consolas, monaco, monospace;
+
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        font-weight: 600;
+        color: #333;
+        line-height: 1.6;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #4c4b4b;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+      }
+
+      /* Container Styles for Buttons */
+      div {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 40px;
+      }
+
+      /* Button Styling */
+      .btn {
+        width: 250px;
+        padding: 16px 20px;
+        margin: 10px;
+        font-size: 1.2rem;
+        color: #fff;
+        background-color: #4c4b4b;
+        border: 2px solid #4c4b4b;
+        border-radius: 8px;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        box-sizing: border-box;
+      }
+
+      /* Button Hover Effect */
+      .btn:hover {
+        background-color: #333;
+        color: #fff;
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Button Active Animation */
+      .btn:active {
+        transform: scale(0.98);
+        box-shadow: none;
+      }
+
+      /* Responsive Design for Small Screens */
+      @media (max-width: 768px) {
+        div {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <header>
+    <h1>Queuing Models</h1>
+  </header>
+  <body>
+    <div>
+      <a href="mm1.html"><button class="btn">M/M/1</button></a>
+      <a href="mg1.html"><button class="btn">M/G/1</button></a>
+      <a href="gg1.html"><button class="btn">G/G/1</button></a>
+      <a href="mm2.html"><button class="btn">M/M/C</button></a>
+      <a href="mg2.html"><button class="btn">M/G/C</button></a>
+      <a href="gg2.html"><button class="btn">G/G/C</button></a>
+    </div>
+  </body>
+</html>

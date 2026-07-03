@@ -1,0 +1,622 @@
+//QUEING MODEL
+
+// Function to show/hide relevant input fields based on the selected distribution
+function updateInputs() {
+  const distributionType = document.getElementById("distributionType").value;
+
+  // Hide all input sections by default
+  document.getElementById("uniformInputs").classList.add("hidden");
+  document.getElementById("gammaInputs").classList.add("hidden");
+  document.getElementById("normalInputs").classList.add("hidden");
+
+  // Show inputs based on the selected distribution
+  if (distributionType === "uniform") {
+      document.getElementById("uniformInputs").classList.remove("hidden");
+  } else if (distributionType === "gamma") {
+      document.getElementById("gammaInputs").classList.remove("hidden");
+  } else if (distributionType === "normal") {
+      document.getElementById("normalInputs").classList.remove("hidden");
+  }
+}
+
+// Function to calculate mew and sigma for all distributions
+function calculateMewAndSigma(distributionType, params) {
+  let mew, sigma;
+
+  if (distributionType === "uniform") {
+      const { minvalue, maxvalue } = params;
+      const midpoint = (+minvalue + +maxvalue) / 2;
+      mew = 1 / midpoint;
+      sigma = ((+maxvalue - +minvalue) ** 2) / 12;
+  } else if (distributionType === "gamma") {
+      const { mean, shape } = params;
+      mew = 1 / (mean*shape);
+      sigma = mean *(shape ** 2);
+  } else if (distributionType === "normal") {
+      const { Mean, sd } = params;
+      console.log(params)
+      console.log(Mean)
+      console.log(sd)
+
+      mew = 1 / Mean;
+      sigma = sd ** 2;
+      console.log(mew,sigma)
+
+  }
+
+  return { mew, sigma };
+}
+
+// Main M/G/1 Function
+function mg1() {
+  const distributionType = document.getElementById("distributionType").value;
+
+  // Check if a distribution type is selected
+  if (!distributionType) {
+      alert("Please select a distribution type!");
+      return;
+  }
+
+  let params = {};
+
+  // Retrieve parameters based on the selected distribution type
+  if (distributionType === "uniform") {
+      params.minvalue = document.getElementById("uniformMin").value;   
+      params.maxvalue = document.getElementById("uniformMax").value;    
+  } else if (distributionType === "gamma") {
+      params.mean = document.getElementById("gammaMean").value;
+      params.shape = document.getElementById("gammaShape").value;
+  } else if (distributionType === "normal") {
+      params.mean = document.getElementById("normalMean").value;
+      params.sd = document.getElementById("normalSD").value;
+  }
+
+  // Validate that all required fields for the selected distribution are filled
+  for (const key in params) {
+      if (!params[key]) {
+          alert(`Please fill all fields for the ${distributionType} distribution!`);
+          return;
+      }
+  }
+
+  // Calculate mean (mew) and standard deviation (sigma) using the selected distribution
+  const { mew, sigma } = calculateMewAndSigma(distributionType, params);
+
+  // Calculate λ (Interarrival Rate) using the Mean provided
+  const lambda = 1 / +document.getElementById("Mean-arr").value; // λ = 1 / Mean Interarrival
+  document.getElementById("interarrival").textContent = lambda.toFixed(4);
+  document.getElementById("service").textContent = mew.toFixed(4);
+
+  // Compute Utilization (ρ = λ / μ)
+  const rho = lambda / mew;
+  document.getElementById("rho").textContent = rho.toFixed(4);
+  console.log(rho);
+
+  document.getElementById("VARIANCE").textContent = sigma.toFixed(4);
+
+  // Compute Lq (Average number of customers in the queue)
+  const Lq = (Math.pow(lambda, 2) * sigma + Math.pow(rho, 2)) / (2 * (1 - rho));
+  document.getElementById("lq").textContent = Lq.toFixed(4);
+
+  // Compute Wq (Average wait time in the queue)
+  const Wq = Lq / lambda;
+  document.getElementById("wq").textContent = Wq.toFixed(4);
+
+  // Compute W (Average wait time in the system)
+  const W = Wq + (1 / mew);
+  document.getElementById("w").textContent = W.toFixed(4);
+
+  // Compute L (Average number of customers in the system)
+  const L = lambda * W;
+  document.getElementById("L").textContent = L.toFixed(4);
+}
+
+//M/M/1
+function data() {
+  const mean1 = document.getElementById("Mean1");
+  const mean2 = document.getElementById("Mean2");
+
+  // Check if either field is empty
+  if (mean1.value === "" || mean2.value === "") {
+    alert("Please fill in the required fields: Lambda (λ) and Mu (μ).");
+    return; // Stop further execution if fields are empty
+  }
+
+  let interarrival = document.getElementById("interarrival");
+  let IA = 1 / mean1.value;
+  interarrival.textContent = IA;
+
+  let service = document.getElementById("service");
+  let servicetime = 1 / mean2.value;
+  service.innerText = servicetime;
+
+  let rho = document.getElementById("rho");
+  let P = IA / servicetime;
+  rho.textContent = P;
+
+  let lq = document.getElementById("lq");
+  let Lq = Math.pow(P, 2) / (1 - P);
+  lq.textContent = Lq;
+
+  let wq = document.getElementById("wq");
+  let Wq = Lq / IA;
+  wq.textContent = Wq;
+
+  let w = document.getElementById("w");
+  let ws = Wq + 1 / servicetime;
+  w.textContent = ws;
+
+  let l = document.getElementById("L");
+  let L = IA * ws;
+  l.textContent = L;
+
+  mean1.value = "";
+  mean2.value = "";
+}
+
+//M/M/2
+// 
+
+function mmc() {
+  const mean1 = document.getElementById("Mean1");
+  const mean2 = document.getElementById("Mean2");
+  const servers = document.getElementById("Servers"); // New input for number of servers (c)
+
+  // Check if mean1, mean2, or servers are not filled
+  if (mean1.value === "" || mean2.value === "" || servers.value === "") {
+    alert("Please fill in the required fields: Lambda (λ), Mu (μ) and Servers.");
+    return; // Stop further execution if any field is empty
+  }
+
+  let interarrival = document.getElementById("interarrival");
+
+  const lambda = 1 / mean1.value; // Arrival rate
+  const mu = 1 / mean2.value; // Service rate
+  const c = parseInt(servers.value); // Number of servers
+
+  interarrival.textContent = lambda;
+
+  let service = document.getElementById("service");
+  service.innerText = mu;
+
+  let rho = document.getElementById("rho");
+  const P = lambda / (c * mu); // Utilization factor
+  rho.textContent = P;  
+
+  if (P >= 1) {
+    alert("System is unstable (rho >= 1). Please adjust mean values or the number of servers.");
+    return;
+  }
+
+  // Calculate P0 (probability of zero customers in the system)
+  let sum = 0;
+  for (let n = 0; n < c; n++) {
+    sum += Math.pow(lambda / mu, n) / factorial(n);
+  }
+  const part2 = Math.pow(lambda / mu, c) / (factorial(c) * (1 - P));
+  const P0 = 1 / (sum + part2);
+
+  // Calculate Lq (average number of customers in the queue)
+  let lq = document.getElementById("lq");
+  const Lq = (Math.pow(lambda / mu, c) * P0 * P) / (factorial(c) * Math.pow(1 - P, 2));
+  lq.textContent = Lq;
+
+  // Calculate Wq (average time in the queue)
+  let wq = document.getElementById("wq");
+  const Wq = Lq / lambda;
+  wq.textContent = Wq;
+
+  // Calculate Ws (average time in the system)
+  let w = document.getElementById("w");
+  const Ws = Wq + 1 / mu;
+  w.textContent = Ws;
+
+  // Calculate L (average number of customers in the system)
+  let l = document.getElementById("L");
+  const L = lambda * Ws;
+  l.textContent = L;
+
+  mean1.value = "";
+  mean2.value = "";
+  servers.value = "";
+}
+
+
+// Helper function to calculate factorial
+function factorial(n) {
+  if (n === 0 || n === 1) return 1;
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+//M/G/2
+
+function mgc() {
+  // Get user inputs
+  const lambda = 1 / +document.getElementById("Mean-arr").value; // Interarrival rate (λ)
+  const c = +document.getElementById("Servers").value;           // Number of servers (c)
+  const distributionType = document.getElementById("distributionType").value; 
+  console.log(lambda,c,distributionType)// Selected distribution type
+  let params = {};
+  
+
+  // Retrieve parameters based on the selected distribution type
+  if (distributionType === "uniform") {
+      params.minvalue = document.getElementById("uniformMin").value;   
+      params.maxvalue = document.getElementById("uniformMax").value;    
+  } else if (distributionType === "gamma") {
+      params.mean = document.getElementById("gammaMean").value;
+      params.shape = document.getElementById("gammaShape").value;
+  } else if (distributionType === "normal") {
+      params.mean = document.getElementById("normalMean").value;
+      params.sd = document.getElementById("normalSD").value;
+  }
+
+  // Validate that all required fields for the selected distribution are filled
+  for (const key in params) {
+      if (!params[key]) {
+          alert(`Please fill all fields for the ${distributionType} distribution!`);
+          return;
+      }
+  }        // Fetch relevant parameters for the selected distribution
+
+  if (!lambda || !c || !distributionType || !params) {
+    alert("Please fill all required inputs (Mean-arr, servers, distribution type, and its parameters)!");
+    return;
+  }
+
+  // Calculate mew (service rate μ) and variance from the distribution
+  // const { mew, sigma } = calculateMewAndSigma(distributionType, params);
+  const { mew, sigma } = calculateMewAndSigma(distributionType, params);
+  console.log(mew,sigma)
+
+  // Validate inputs
+  if (!mew || sigma === undefined) {
+    alert("Invalid distribution parameters or calculation error.");
+    return;
+  }
+
+  const rho = lambda / (c * mew); // Server utilization per server
+  if (rho >= 1) {
+    alert("System is unstable (P >= 1). Please adjust λ, μ, or c.");
+    return;
+  }
+
+  // Calculate Cs^2 (squared coefficient of variation of the service time)
+  const Cs2 = sigma / (1 / mew) ** 2;
+
+  // Calculate P0 (probability of zero customers in the system)
+  let sum = 0;
+  for (let n = 0; n < c; n++) {
+    sum += Math.pow(lambda / mew, n) / factorial(n);
+    console.log(sum);
+  }
+  const part2 = Math.pow(lambda / mew, c) / (factorial(c) * (1 - rho));
+  console.log(part2)
+  const P0 = 1 / (sum + part2);
+  console.log(P0)
+  
+
+  // Display P0
+  //document.getElementById("P0").textContent = P0.toFixed(4);
+  document.getElementById("interarrival").textContent = lambda.toFixed(4);
+  document.getElementById("service").textContent = mew.toFixed(4);
+
+  // Compute Utilization (ρ = λ / μ)
+  
+  document.getElementById("rho").textContent = rho.toFixed(4);
+  console.log(rho);
+
+  document.getElementById("VARIANCE").textContent = sigma.toFixed(4);
+  // Calculate P(wait) (probability a customer waits in the queue)
+  const P_wait = (Math.pow(c * rho, c) * P0) / (factorial(c) * (1 - rho));
+  console.log(P_wait)
+
+  //document.getElementById("P_wait").textContent = P_wait.toFixed(4);
+
+  // Corrected: Calculate Lq (average number of customers in the queue)
+  const Lq = (P_wait * rho * (Cs2 + 1)) / (2 * (1 - rho));
+  document.getElementById("lq").textContent = Lq.toFixed(4);
+
+  // Calculate Wq (average wait time in the queue)
+  const Wq = Lq / lambda;
+  document.getElementById("wq").textContent = Wq.toFixed(4);
+
+  // Calculate W (average time in the system)
+  const W = Wq + (1 / mew);
+  document.getElementById("w").textContent = W.toFixed(4);
+
+  // Calculate L (average number of customers in the system)
+  const L = lambda * W;
+  document.getElementById("L").textContent = L.toFixed(4);
+}
+
+
+function factorialize(num) {
+  // If the number is less than 0, reject it.
+  if (num < 0) return -1;
+  // If the number is 0, its factorial is 1.
+  else if (num == 0) return 1;
+  // Otherwise, call the recursive procedure again
+  else {
+    return num * factorialize(num - 1);
+  }
+}
+
+// G/G/1
+// Function to show/hide relevant input fields based on the selected distribution
+function updateGG1Inputs() {
+  // Get selected interarrival and service distribution types
+  const interarrivalType = document.getElementById("interarrivalType").value;
+  const serviceType = document.getElementById("serviceType").value;
+
+  // Hide all input sections by default
+  document.getElementById("uniformInputs").classList.add("hidden");
+  document.getElementById("gammaInputs").classList.add("hidden");
+  document.getElementById("normalInputs").classList.add("hidden");
+
+  document.getElementById("serviceUniformInputs").classList.add("hidden");
+  document.getElementById("serviceGammaInputs").classList.add("hidden");
+  document.getElementById("serviceNormalInputs").classList.add("hidden");
+
+  // Show inputs based on the selected interarrival distribution
+  if (interarrivalType === "uniform") {
+      document.getElementById("uniformInputs").classList.remove("hidden");
+  } else if (interarrivalType === "gamma") {
+      document.getElementById("gammaInputs").classList.remove("hidden");
+  } else if (interarrivalType === "normal") {
+      document.getElementById("normalInputs").classList.remove("hidden");
+  }
+
+  // Show inputs based on the selected service distribution
+  if (serviceType === "uniform") {
+      document.getElementById("serviceUniformInputs").classList.remove("hidden");
+  } else if (serviceType === "gamma") {
+      document.getElementById("serviceGammaInputs").classList.remove("hidden");
+  } else if (serviceType === "normal") {
+      document.getElementById("serviceNormalInputs").classList.remove("hidden");
+  }
+}
+function gg1() {
+  // Get distribution types
+  const interarrivalType = document.getElementById("interarrivalType").value;
+  const serviceType = document.getElementById("serviceType").value;
+
+  // Gather interarrival inputs
+  const interarrivalParams = {};
+  if (interarrivalType === "uniform") {
+    interarrivalParams.maxvalue = document.getElementById("interarrivalMax").value;
+    interarrivalParams.minvalue = document.getElementById("interarrivalMin").value;
+  } else if (interarrivalType === "gamma") {
+    interarrivalParams.mean = document.getElementById("interarrivalmean").value;
+    interarrivalParams.shape = document.getElementById("interarrivalShape").value;
+  } else if (interarrivalType === "normal") {
+    interarrivalParams.Mean = document.getElementById("interarrivalMean").value;
+    
+    interarrivalParams.sd = document.getElementById("interarrivalSD").value;
+  }
+
+  // Gather service inputs
+  const serviceParams = {};
+  if (serviceType === "uniform") {
+    serviceParams.maxvalue = document.getElementById("serviceMax").value;
+    serviceParams.minvalue = document.getElementById("serviceMin").value;
+  } else if (serviceType === "gamma") {
+    serviceParams.mean = document.getElementById("servicemean").value;
+    serviceParams.shape = document.getElementById("serviceShape").value;
+  } else if (serviceType === "normal") {
+    serviceParams.Mean = document.getElementById("serviceMean").value;
+    console.log(serviceParams.Mean)
+    serviceParams.sd = document.getElementById("serviceSD").value;
+  }
+  if (!interarrivalType || !serviceType) {
+    alert("Please fill all required inputs (servers, interarrival type, and service type)!");
+    return;
+  }
+ 
+  // Calculate mean and variance for interarrival and service times using calculateMewAndSigma
+  const { mew: mean1, sigma: var1 } = calculateMewAndSigma(interarrivalType, interarrivalParams);
+  console.log(mean1,var1)
+  const { mew: mean2, sigma: var2 } = calculateMewAndSigma(serviceType, serviceParams);
+  console.log(mean2,var2)
+
+  if (!mean1 || mean2 || !var1 || !var2) {
+    alert("Please fill all required inputs (Mean-arr, servers, distribution type, and its parameters)!");
+    return;
+  }
+  document.getElementById("VARIANCEA").textContent = var1.toFixed(4);
+  document.getElementById("VARIANCES").textContent = var2.toFixed(4);
+
+
+  // Calculate interarrival rate (λ) and service rate (μ)
+  let interarrival = document.getElementById("interarrival");
+  let IA =  mean1;
+  interarrival.textContent = IA;
+
+  let service = document.getElementById("service");
+  let servicetime = mean2;
+  service.textContent = servicetime;
+
+  // Calculate traffic intensity (ρ)
+  let rho = document.getElementById("rho");
+  let P = IA / servicetime;
+  rho.textContent = P;
+
+  // Calculate coefficients of variation
+  let Cs = var2 /((1/servicetime) ** 2);
+  console.log(Cs)
+  let Ca = var1 / ((1/IA) ** 2);
+  console.log(Ca)
+
+
+  // Calculate queue length (Lq)
+  let lq = document.getElementById("lq");
+  let Lq =
+    (P ** 2 * (1 + Cs) * (Ca + P ** 2 * Cs)) /
+    (2 * (1 - P) * (1 + P ** 2 * Cs));
+  lq.textContent = Lq;
+
+  // Calculate waiting time in queue (Wq)
+  let wq = document.getElementById("wq");
+  let Wq = Lq / IA;
+  wq.textContent = Wq;
+
+  // Calculate total waiting time (W)
+  let w = document.getElementById("w");
+  let ws = Wq + 1 / servicetime;
+  w.textContent = ws;
+
+  // Calculate total length (L)
+  let l = document.getElementById("L");
+  let L = IA * ws;
+  l.textContent = L;
+
+  // Clear input fields
+  document.querySelectorAll("input").forEach((input) => (input.value = ""));
+}
+
+
+
+
+function updateGGCInputs() {
+  // Get selected interarrival and service distribution types
+  const interarrivalType = document.getElementById("interarrivalType").value;
+  const serviceType = document.getElementById("serviceType").value;
+
+  // Hide all input sections by default
+  document.getElementById("uniformGgcInputs").classList.add("hidden");
+  document.getElementById("gammaGgcInputs").classList.add("hidden");
+  document.getElementById("normalGgcInputs").classList.add("hidden");
+
+  document.getElementById("serviceUniformGgcInputs").classList.add("hidden");
+  document.getElementById("serviceGammaGgcInputs").classList.add("hidden");
+  document.getElementById("serviceNormalGgcInputs").classList.add("hidden");
+
+  // Show inputs based on the selected interarrival distribution
+  if (interarrivalType === "uniform") {
+    document.getElementById("uniformGgcInputs").classList.remove("hidden");
+  } else if (interarrivalType === "gamma") {
+    document.getElementById("gammaGgcInputs").classList.remove("hidden");
+  } else if (interarrivalType === "normal") {
+    document.getElementById("normalGgcInputs").classList.remove("hidden");
+  }
+
+  // Show Ggcinputs based on the selected service distribution
+  if (serviceType === "uniform") {
+    document.getElementById("serviceUniformGgcInputs").classList.remove("hidden");
+  } else if (serviceType === "gamma") {
+    document.getElementById("serviceGammaGgcInputs").classList.remove("hidden");
+  } else if (serviceType === "normal") {
+    document.getElementById("serviceNormalGgcInputs").classList.remove("hidden");
+  }
+}
+
+//G/G/2
+function ggc() {
+  // Get user inputs
+  const interarrivalType = document.getElementById("interarrivalType").value; // Interarrival distribution type
+  const serviceType = document.getElementById("serviceType").value;           // Service distribution type
+  const c = +document.getElementById("Servers").value;                        // Number of servers
+
+  let interarrivalParams = {};
+  let serviceParams = {};
+
+  // Retrieve interarrival distribution parameters
+  if (interarrivalType === "uniform") {
+    interarrivalParams.minvalue = document.getElementById("uniformMin").value;
+    interarrivalParams.maxvalue = document.getElementById("uniformMax").value;
+  } else if (interarrivalType === "gamma") {
+    interarrivalParams.mean = document.getElementById("gammaMean").value;
+    interarrivalParams.shape = document.getElementById("gammaShape").value;
+  } else if (interarrivalType === "normal") {
+    interarrivalParams.Mean = document.getElementById("normalMean").value;
+    interarrivalParams.sd = document.getElementById("normalSD").value;
+  }
+
+  // Retrieve service distribution parameters
+  if (serviceType === "uniform") {
+    serviceParams.minvalue = document.getElementById("serviceUniformMin").value;
+    serviceParams.maxvalue = document.getElementById("serviceUniformMax").value;
+  } else if (serviceType === "gamma") {
+    serviceParams.mean = document.getElementById("serviceGammaMean").value;
+    serviceParams.shape = document.getElementById("serviceGammaShape").value;
+  } else if (serviceType === "normal") {
+    serviceParams.Mean = document.getElementById("serviceNormalMean").value;
+    serviceParams.sd = document.getElementById("serviceNormalSD").value;
+  }
+
+  // Validate required inputs
+  if (!c || !interarrivalType || !serviceType) {
+    alert("Please fill all required inputs (servers, interarrival type, and service type)!");
+    return;
+  }
+  console.log(interarrivalType)
+  console.log(interarrivalParams)
+
+  console.log(serviceType)
+  console.log(serviceParams)
+
+  // Calculate lambda (arrival rate) and Ca^2 (arrival time variability)
+  const { mew: lambda, sigma: var1 } = calculateMewAndSigma(interarrivalType, interarrivalParams);
+
+  // Calculate mew (service rate) and Cs^2 (service time variability)
+  const { mew, sigma: var2 } = calculateMewAndSigma(serviceType, serviceParams);
+  console.log(lambda,var1)
+  console.log(mew,var2)
+
+  let Cs2 = var2 /((1/mew) ** 2);
+  console.log(Cs2)
+  let Ca2 = var1 / ((1/lambda) ** 2);
+  console.log(Ca2)
+  // Validate lambda, mew, and sigma values
+  if (!lambda || !mew || Cs2 === undefined || Ca2 === undefined) {
+    alert("Invalid distribution parameters or calculation error.");
+    return;
+  }
+
+  // System Utilization (ρ)
+  const rho = lambda / (c * mew);
+  if (rho >= 1) {
+    alert("System is unstable (ρ >= 1). Please adjust λ, μ, or c.");
+    return;
+  }
+
+  // Calculate P0 (probability of zero customers in the system)
+  let sum = 0;
+  for (let n = 0; n < c; n++) {
+    sum += Math.pow(lambda / mew, n) / factorialize(n);
+  }
+  const part2 = Math.pow(lambda / mew, c) / (factorialize(c) * (1 - rho));
+  const P0 = 1 / (sum + part2);
+  console.log(P0)
+
+  // Calculate P(wait) - Probability a customer waits in the queue
+  const P_wait = (Math.pow(c * rho, c) * P0) / (factorialize(c) * (1 - rho));
+  console.log(P_wait)
+  // Calculate Lq (average number of customers in the queue)
+  const Wq = (P_wait * rho * (Ca2 + Cs2)) / ((2 * (1 - rho))*mew);
+
+  // Calculate Wq (average wait time in the queue)
+  const Lq =  lambda*Wq;
+
+  // Calculate W (average time in the system)
+  const W = Wq + (1 / mew);
+
+  // Calculate L (average number of customers in the system)
+  const L = lambda * W;
+
+  document.getElementById("VARIANCEA").textContent = var1.toFixed(4);
+  document.getElementById("VARIANCES").textContent = var2.toFixed(4);
+  // Display Results
+  document.getElementById("interarrival").textContent = lambda.toFixed(4);
+  document.getElementById("service").textContent = mew.toFixed(4);
+  document.getElementById("rho").textContent = rho.toFixed(4);
+  // document.getElementById("P0").textContent = P0.toFixed(4);
+  // document.getElementById("P_wait").textContent = P_wait.toFixed(4);
+  document.getElementById("lq").textContent = Lq.toFixed(4);
+  document.getElementById("wq").textContent = Wq.toFixed(4);
+  document.getElementById("w").textContent = W.toFixed(4);
+  document.getElementById("L").textContent = L.toFixed(4);
+}
